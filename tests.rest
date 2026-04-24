@@ -6,13 +6,11 @@ GET http://localhost:3001/api/persons HTTP/1.1
 
 ###
 
-POST http://localhost:3001/api/persons HTTP/1.1
-Content-Type: application/json
+GET http://localhost:3001/info HTTP/1.1
 
-{
-    "name": "Dan Grindall",
-    "number": "425 835 0125"
-}
+###
+
+GET http://localhost:3001/api/persons/69ea78806903cac5c67c74d0 HTTP/1.1
 
 ###
 
@@ -20,6 +18,16 @@ POST http://localhost:3001/api/persons HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "Tim Thornton",
+    "name": "Donny MacDonald",
+    "number": "800 234 7845"
+}
+
+###
+
+PUT http://localhost:3001/api/persons/69ea78806903cac5c67c74d0 HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Tim Thornback",
     "number": "360 502 0027"
 }

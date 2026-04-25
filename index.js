@@ -55,19 +55,18 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response) => {
     let id = request.params.id
-    const maxId = getMaxId()
     
-    if (id !== '0' && id <= maxId) {   // simply using length doesn't work when the id is higher
-        deletedPerson = persons.filter((p) => p.id === id)
-        persons = persons.filter((p) => p.id !== id)
-
-        response.json(deletedPerson)
-        //response.status(204).end()
-    } else {
-        console.log("Error: id was invalid (out of bounds)")
-        response.status(400).end()
-    }
-
+    Person.findByIdAndDelete(id).then(result => {
+        console.log(result)
+        if (result) {
+            response.status(204).end()
+        } else {
+            response.status(400).send({error: "Could not delete"})
+        }
+    }).catch(error => {
+        console.log(error)
+        response.status(400).send({error: "Doc not found"})
+    })
 })
 
 const MAX_INT = 1000

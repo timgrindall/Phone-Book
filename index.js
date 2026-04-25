@@ -39,11 +39,6 @@ app.get('/info', (request, response, next) => {
     })
 })
 
-const getMaxId = () => {
-    const maxId = persons.length > 0 ? Math.max(...persons.map(p => Number(p.id))) : 0
-    return String(maxId)
-}
-
 app.get('/api/persons/:id', (request, response, next) => {
     let id = request.params.id
     Person.findById(id).then(person => {
@@ -76,14 +71,14 @@ app.delete('/api/persons/:id', (request, response, next) => {
     })
 })
 
-const MAX_INT = 1000
+// const MAX_INT = 1000
 
-function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
-}
+// function getRandomInt(max) {
+//   return Math.floor(Math.random() * max);
+// }
 
 app.post('/api/persons', (request, response, next) => {
-    const id = getRandomInt(MAX_INT)
+    // const id = getRandomInt(MAX_INT)
     const body = request.body
 
     if (!body.name || !body.number) {
@@ -98,8 +93,7 @@ app.post('/api/persons', (request, response, next) => {
         } else {
             const person = new Person({
                 name: body.name,
-                number: body.number,
-                id: id
+                number: body.number
             })
             
             //add person to the database

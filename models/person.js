@@ -24,12 +24,12 @@ mongoose.connect(url, { family: 4 })
 const personSchema = new mongoose.Schema({
   name: {
     type: String,
-    minLength: 5,
+    minLength: 3,
     required: true
   },
   number: {
     type: String,
-    minLength: 10,
+    minLength: 7,
     required: true
   },
   id: String

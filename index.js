@@ -17,19 +17,25 @@ app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
 })
 
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (request, response, next) => {
     Person.find({}).then(persons => {
         response.json(persons)
+    }).catch(error => {
+        console.log(error)
+        next(error)
     })
 })
 
-app.get('/info', (request, response) => {
+app.get('/info', (request, response, next) => {
     Person.find({}).then(persons => {
         let numPersons = persons.length
         let datetime = new Date()
 
         console.log(persons.length + " persons")
         response.send(`<p>Phone Book has info for ${numPersons} people</p><p>${datetime}</p>`)
+    }).catch(error => {
+        console.log(error)
+        next(error)
     })
 })
 
@@ -38,7 +44,7 @@ const getMaxId = () => {
     return String(maxId)
 }
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
     let id = request.params.id
     Person.findById(id).then(person => {
         console.log(person)
@@ -49,11 +55,11 @@ app.get('/api/persons/:id', (request, response) => {
         }
     }).catch(error => {
         console.log(error)
-        response.status(400).send({error: "malformatted id"})
+        next(error)
     })
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
     let id = request.params.id
     
     Person.findByIdAndDelete(id).then(result => {
@@ -61,11 +67,12 @@ app.delete('/api/persons/:id', (request, response) => {
         if (result) {
             response.status(204).end()
         } else {
-            response.status(400).send({error: "Could not delete"})
+            response.status(400).send({error: "ID not found"})
         }
     }).catch(error => {
         console.log(error)
-        response.status(400).send({error: "Doc not found"})
+        // response.status(400).send({error: "Doc not found"})
+        next(error)
     })
 })
 
@@ -75,7 +82,7 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
     const id = getRandomInt(MAX_INT)
     const body = request.body
 
@@ -98,13 +105,19 @@ app.post('/api/persons', (request, response) => {
             //add person to the database
             person.save().then(savedPerson => {
                 response.json(savedPerson)
+            }).catch(error => {
+                // console.log(error)
+                next(error)
             })
         }
+    }).catch(error => {
+        console.log(error)
+        next(error)
     })
 
 })
 
-app.put('/api/persons/:id', (request, response) => {
+app.put('/api/persons/:id', (request, response, next) => {
     const body = request.body
     const id = request.params.id
     console.log(body)
@@ -118,9 +131,25 @@ app.put('/api/persons/:id', (request, response) => {
         }
     }).catch(error => {
         console.log("ID not found!")
-        response.status(404).json({error: 'malformatted ID'})
+        // response.status(404).json({error: 'malformatted ID'})
+        next(error)
     })
 })
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id - message' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
+
+  next(error)
+}
+
+// this has to be the last loaded middleware, also all the routes should be registered before this!
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {

@@ -1,4 +1,4 @@
-DELETE http://localhost:3001/api/persons/69ea78806903cac5c67c74d0 HTTP/1.1
+DELETE http://localhost:3001/api/persons/69ea7916eed378bdd49f7034 HTTP/1.1
 
 ###
 
@@ -10,7 +10,7 @@ GET http://localhost:3001/info HTTP/1.1
 
 ###
 
-GET http://localhost:3001/api/persons/69ea78806903cac5c67c74d0 HTTP/1.1
+GET http://localhost:3001/api/persons/69ea7e089ddb43e51e2a126a HTTP/1.1
 
 ###
 
@@ -18,8 +18,8 @@ POST http://localhost:3001/api/persons HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "Tim Thornback",
-    "number": "360 502 0027"
+    "name": "Rex Hamilton",
+    "number": ""
 }
 
 ###

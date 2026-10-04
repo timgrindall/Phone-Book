@@ -8,6 +8,8 @@ sequenceDiagram
     server-->>browser: 302 Response with redirect address
     deactivate server
 
+    Note right of browser: The browser fetches the page again
+
     browser->>server: GET https://fullstack-exampleapp.herokuapp.com/notes
     activate server
     server-->>browser: 200 Response with the Notes page

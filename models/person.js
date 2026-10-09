@@ -5,8 +5,8 @@ const mongoose = require('mongoose')
 
 
 if (!process.env.MONGODB_URI) {
-    console.log("No MONGO_URI ENV variable!")
-    process.exit(1)
+  console.log('No MONGO_URI ENV variable!')
+  process.exit(1)
 }
 
 const url = process.env.MONGODB_URI
@@ -14,7 +14,7 @@ const url = process.env.MONGODB_URI
 mongoose.set('strictQuery',false)
 
 mongoose.connect(url, { family: 4 })
-  .then(result => {
+  .then(() => {
     console.log('connected to MongoDB')
   })
   .catch(error => {
